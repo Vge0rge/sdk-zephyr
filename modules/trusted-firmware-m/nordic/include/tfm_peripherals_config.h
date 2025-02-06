@@ -12,7 +12,13 @@ extern "C" {
 #endif
 
 #ifdef SECURE_UART1
+
+#if defined(NRF54L15_XXAA)
 #define TFM_PERIPHERAL_UARTE30_SECURE 1
+#else
+#define TFM_PERIPHERAL_UARTE1_SECURE 1
+#endif
+
 #endif
 
 #if TEST_NS_SLIH_IRQ || TEST_NS_FLIH_IRQ
