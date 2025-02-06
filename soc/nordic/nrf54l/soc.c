@@ -40,17 +40,9 @@ LOG_MODULE_REGISTER(soc, CONFIG_SOC_LOG_LEVEL);
 #define HFXO_NODE DT_NODELABEL(hfxo)
 #endif
 
-static int nordicsemi_nrf54l_init(void)
-{
-	/* Update the SystemCoreClock global variable with current core clock
-	 * retrieved from hardware state.
-	 */
-	SystemCoreClockUpdate();
-
 #if defined(NRF_APPLICATION)
-	/* Enable ICACHE */
-	sys_cache_instr_enable();
-
+static inline void power_and_clock_configuration(void)
+{
 #if DT_ENUM_HAS_VALUE(LFXO_NODE, load_capacitors, internal)
 	uint32_t xosc32ktrim = NRF_FICR->XOSC32KTRIM;
 
@@ -163,7 +155,23 @@ static int nordicsemi_nrf54l_init(void)
 #endif
 	nrf_regulators_vreg_enable_set(NRF_REGULATORS, NRF_REGULATORS_VREG_MAIN, true);
 #endif
+}
+#endif /* NRF_APPLICATION */
 
+
+
+int nordicsemi_nrf54l_init(void)
+{
+	/* Update the SystemCoreClock global variable with current core clock
+	 * retrieved from hardware state.
+	 */
+	SystemCoreClockUpdate();
+
+#if defined(NRF_APPLICATION)
+	/* Enable ICACHE */
+	sys_cache_instr_enable();
+
+	power_and_clock_configuration();
 #endif /* NRF_APPLICATION */
 
 	return 0;
