@@ -40,6 +40,13 @@ LOG_MODULE_REGISTER(soc, CONFIG_SOC_LOG_LEVEL);
 #define HFXO_NODE DT_NODELABEL(hfxo)
 #endif
 
+/* Building for cpuflpr with ns uses cpu_1 instead of cpu_0 */
+#if DT_PROP(DT_PATH(cpus, cpu_0), clock_frequency)
+#define DEVICE_DT_CLOCK_FREQ DT_PROP(DT_PATH(cpus, cpu_0), clock_frequency)
+#elif DT_PROP(DT_PATH(cpus, cpu_1), clock_frequency)
+#define DEVICE_DT_CLOCK_FREQ DT_PROP(DT_PATH(cpus, cpu_1), clock_frequency)
+#endif
+
 #if defined(NRF_APPLICATION)
 static inline void power_and_clock_configuration(void)
 {
@@ -162,12 +169,12 @@ static inline void power_and_clock_configuration(void)
 
 int nordicsemi_nrf54l_init(void)
 {
-	/* Update the SystemCoreClock global variable with current core clock
-	 * retrieved from hardware state.
+	/* Update SystemCoreClock in Zephyr based on device tree to avoid SystemCoreClock
+	 * being overwritten with default value when initializing with TF-M
 	 */
-	SystemCoreClockUpdate();
+	SystemCoreClock = DEVICE_DT_CLOCK_FREQ;
 
-#if defined(NRF_APPLICATION)
+#if defined(NRF_APPLICATION) && !defined(CONFIG_TRUSTED_EXECUTION_NONSECURE)
 	/* Enable ICACHE */
 	sys_cache_instr_enable();
 
