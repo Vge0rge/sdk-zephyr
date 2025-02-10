@@ -23,13 +23,9 @@
 
 / {
 	/*
-	 * Default SRAM planning when building for nRF91xx with
-	 * ARM TrustZone-M support
-	 * - Lowest 88 kB SRAM allocated to Secure image (sram0_s).
-	 * - Upper 168 kB SRAM allocated to Non-Secure image (sram0_ns).
-	 * Of the memory allocated to the Non-Secure image
-	 * - 40 kB SRAM reserved for and used by the modem library (sram0_ns_modem).
-	 * - 128 kB allocated to the application (sram0_ns_app).
+	 * Default SRAM planning when building for nRF54L15 with * ARM TrustZone-M support
+	 * - Lowest 80 kB SRAM allocated to Secure image (sram0_s).
+	 * - Upper 80 kB SRAM allocated to Non-Secure image (sram0_ns).
 	 */
 	reserved-memory {
 		#address-cells = <1>;
@@ -38,12 +34,12 @@
 
 		sram0_s: image_s@20000000 {
 			/* Secure image memory */
-			reg = <0x20000000 DT_SIZE_K(128)>;
+			reg = <0x20000000 DT_SIZE_K(80)>;
 		};
 
-		sram0_ns: image_ns@20020000 {
+		sram0_ns: image_ns@20014000 {
 			/* Non-Secure image memory */
-			reg = <0x20020000 DT_SIZE_K(128)>;
+			reg = <0x20014000 DT_SIZE_K(80)>;
 		};
 	};
 };
@@ -54,68 +50,30 @@
 		#address-cells = <1>;
 		#size-cells = <1>;
 
-		slot0_partition: partition@000 {
+		slot0_partition: partition@0 {
 			label = "image-0";
-			reg = <0x0000000 DT_SIZE_K(320)>;
+			reg = <0x0000000 DT_SIZE_K(512)>;
 		};
-		tfm_ps_partition: partition@50000 {
+		tfm_ps_partition: partition@80000 {
 			label = "tfm-ps";
-			reg = <0x00050000 DT_SIZE_K(16)>;
+			reg = <0x00080000 DT_SIZE_K(16)>;
 		};
-		tfm_its_partition: partition@54000 {
+		tfm_its_partition: partition@84000 {
 			label = "tfm-its";
-			reg = <0x00054000 DT_SIZE_K(16)>;
+			reg = <0x00084000 DT_SIZE_K(16)>;
 		};
-		tfm_otp_partition: partition@58000 {
+		tfm_otp_partition: partition@88000 {
 			label = "tfm-otp";
-			reg = <0x00058000 DT_SIZE_K(8)>;
+			reg = <0x00088000 DT_SIZE_K(8)>;
 		};
-		slot0_ns_partition: partition@5A000 {
+		slot0_ns_partition: partition@8A000 {
 			label = "image-0-nonsecure";
-			reg = <0x0005A000 DT_SIZE_K(320)>;
+			reg = <0x0008A000 DT_SIZE_K(844)>;
 		};
-		storage_partition: partition@15A000 {
+		storage_partition: partition@15D000 {
 			label = "storage";
-			reg = <0x00015A000 DT_SIZE_K(32)>;
+			reg = <0x00015D000 DT_SIZE_K(32)>;
 		};
-//
-//		boot_partition: partition@0 {
-//			label = "mcuboot";
-//			reg = <0x00000000 DT_SIZE_K(64)>;
-//		};
-//		tfm_ps_partition: partition@10000 {
-//			label = "tfm-ps";
-//			reg = <0x00010000 DT_SIZE_K(16)>;
-//		};
-//		tfm_its_partition: partition@14000 {
-//			label = "tfm-its";
-//			reg = <0x00014000 DT_SIZE_K(16)>;
-//		};
-//		tfm_otp_partition: partition@18000 {
-//			label = "tfm-otp";
-//			reg = <0x00018000 DT_SIZE_K(8)>;
-//		};
-//		slot0_partition: partition@1A000 {
-//			label = "image-0";
-//			reg = <0x0001A000 DT_SIZE_K(320)>;
-//		};
-//		slot0_ns_partition: partition@6A000 {
-//			label = "image-0-nonsecure";
-//			reg = <0x0006A000 DT_SIZE_K(320)>;
-//		};
-//		slot1_partition: partition@BA000 {
-//			label = "image-1";
-//			reg = <0x000BA000 DT_SIZE_K(320)>;
-//		};
-//		slot1_ns_partition: partition@10A000 {
-//			label = "image-1-nonsecure";
-//			reg = <0x0010A000 DT_SIZE_K(320)>;
-//		};
-//		storage_partition: partition@15A000 {
-//			label = "storage";
-//			reg = <0x00015A000 DT_SIZE_K(32)>;
-//		};
-//
 	};
 };
 
