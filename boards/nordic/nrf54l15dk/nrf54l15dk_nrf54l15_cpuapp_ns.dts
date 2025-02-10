@@ -58,9 +58,25 @@
 			label = "image-0";
 			reg = <0x0000000 DT_SIZE_K(320)>;
 		};
-		slot0_ns_partition: partition@50000 {
+		tfm_ps_partition: partition@50000 {
+			label = "tfm-ps";
+			reg = <0x00050000 DT_SIZE_K(16)>;
+		};
+		tfm_its_partition: partition@54000 {
+			label = "tfm-its";
+			reg = <0x00054000 DT_SIZE_K(16)>;
+		};
+		tfm_otp_partition: partition@58000 {
+			label = "tfm-otp";
+			reg = <0x00058000 DT_SIZE_K(8)>;
+		};
+		slot0_ns_partition: partition@5A000 {
 			label = "image-0-nonsecure";
-			reg = <0x00050000 DT_SIZE_K(320)>;
+			reg = <0x0005A000 DT_SIZE_K(320)>;
+		};
+		storage_partition: partition@15A000 {
+			label = "storage";
+			reg = <0x00015A000 DT_SIZE_K(32)>;
 		};
 //
 //		boot_partition: partition@0 {
