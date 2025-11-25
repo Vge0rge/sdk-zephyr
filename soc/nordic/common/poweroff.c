@@ -32,6 +32,11 @@
 
 void z_sys_poweroff(void)
 {
+#if defined(CONFIG_BUILD_WITH_TFM)
+	tfm_platform_system_off();
+#else
+
+
 #if defined(CONFIG_HAS_NORDIC_RAM_CTRL)
 	uint8_t *ram_start;
 	size_t ram_size;
@@ -67,22 +72,20 @@ void z_sys_poweroff(void)
 #endif
 
 #if defined(CONFIG_SOC_SERIES_NRF54LX)
-#if !defined(CONFIG_BUILD_WITH_TFM)
 	/* Set VPR to remain in its reset state when waking from OFF */
 	nrf_memconf_ramblock_ret_enable_set(NRF_MEMCONF, VPR_POWER_IDX, VPR_RET_BIT, false);
-#endif /* !defined(CONFIG_BUILD_WITH_TFM) */
 
 	nrfx_reset_reason_clear(UINT32_MAX);
 #endif
 
-#if defined(CONFIG_BUILD_WITH_TFM)
-	tfm_platform_system_off();
-#elif defined(CONFIG_SOC_SERIES_NRF51X) || defined(CONFIG_SOC_SERIES_NRF52X)
+#if defined(CONFIG_SOC_SERIES_NRF51X) || defined(CONFIG_SOC_SERIES_NRF52X)
 	nrf_power_system_off(NRF_POWER);
 #elif defined(CONFIG_SOC_SERIES_NRF54HX)
 	nrf_poweroff();
 #else
 	nrf_regulators_system_off(NRF_REGULATORS);
+#endif
+
 #endif
 
 	CODE_UNREACHABLE;
