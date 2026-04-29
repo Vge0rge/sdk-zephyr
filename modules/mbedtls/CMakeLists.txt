@@ -62,6 +62,7 @@ if(CONFIG_MBEDTLS)
     # Add Mbed TLS public include directories to the "mbedTLS" interface library.
     target_include_directories(mbedTLS INTERFACE
       $<TARGET_PROPERTY:mbedtls,INTERFACE_INCLUDE_DIRECTORIES>
+      ${ZEPHYR_TF_PSA_CRYPTO_MODULE_DIR}/include/library
     )
 
     # Add local include directories to the "mbedTLS" interface library.
